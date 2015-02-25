@@ -1,3 +1,8 @@
 #intellij
-.idea/
-.idea/*
+.idea
+
+#build
+build
+
+#gradle
+.gradle
