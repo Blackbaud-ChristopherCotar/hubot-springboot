@@ -12,6 +12,7 @@ public class SlackRTMResponse {
     private String error;
     private ArrayList<User> users;
     private ArrayList<Channel> channels;
+    private Self self;
 
     public String getUrl() {
         return url;
@@ -62,5 +63,13 @@ public class SlackRTMResponse {
                 ", users=" + users +
                 ", channels=" + channels +
                 '}';
+    }
+
+    public Self getSelf() {
+        return self;
+    }
+
+    public void setSelf(Self self) {
+        this.self = self;
     }
 }

@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import bot.entities.SlackChatResponse;
+import bot.entities.SlackChatMessage;
+import bot.entities.SlackRTMResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -22,8 +23,10 @@ public class EventSocket {
 
     @SuppressWarnings("unused")
     private Session session;
+    private SlackRTMResponse state;
 
-    public EventSocket() {
+    public EventSocket(SlackRTMResponse slackRTMResponse) {
+        this.state = slackRTMResponse;
         this.closeLatch = new CountDownLatch(1);
     }
 
@@ -48,8 +51,16 @@ public class EventSocket {
     public void onMessage(String msg) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            SlackChatResponse chatResponse = mapper.readValue(msg, SlackChatResponse.class);
-            System.out.println("got this text   " + chatResponse.getText());
+            SlackChatMessage chatMessage = mapper.readValue(msg, SlackChatMessage.class);
+            System.out.println(chatMessage);
+            if(chatMessage.getText() != null && chatMessage.getText().equals(state.getSelf().getName() + " ping")) {
+                SlackChatMessage response = new SlackChatMessage();
+                response.setId(1);
+                response.setChannel(chatMessage.getChannel());
+                response.setText("pong");
+                response.setType("message");
+                session.getRemote().sendString(mapper.writeValueAsString(response));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
