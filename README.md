@@ -18,3 +18,4 @@ Functions that would be cool:
 * Hipsterpoint system clone?
 * Replicron should maybe be a part of the bot?
 * Outlook current available conf rooms?
+* Apache OpenNLP of commands to make the bot like Siri or Google Now
