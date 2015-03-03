@@ -40,7 +40,8 @@ public class Application {
         try {
             client.start();
             // The socket that receives events
-            EventSocket socket = new EventSocket(slackResponse);
+            EventSocket socket = new EventSocket();
+            socket.setState(slackResponse);
             // Attempt Connect
             client.connect(socket, new URI(webSocketUri), new ClientUpgradeRequest());
         }
