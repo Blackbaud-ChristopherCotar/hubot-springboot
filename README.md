@@ -21,3 +21,4 @@ Functions that would be cool:
 * Apache OpenNLP of commands to make the bot like Siri or Google Now
 * Room chat statistics (i.e. most frequent words)
 * Mirror Yobot actions
+* Bugzilla bug searches?
