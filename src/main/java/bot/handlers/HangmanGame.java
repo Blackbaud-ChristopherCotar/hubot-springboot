@@ -28,7 +28,7 @@ public class HangmanGame {
 
     public void getRandomWord() {
         // TODO use an API or a static list of words!
-        word = "hangman";
+        word = "a";
         leftToGeuss = word.length();
         initializeWordMap();
     }
@@ -38,7 +38,12 @@ public class HangmanGame {
         wordMap = new HashMap<>();
         for(int i = 0; i < word.length(); i++) {
             Character c = word.charAt(i);
-            wordMap.put(c.toString(), 0);
+            Integer charCount = wordMap.get(c.toString());
+            if(charCount != null) {
+                wordMap.put(c.toString(), ++charCount);
+            } else {
+                wordMap.put(c.toString(), 0);
+            }
             wordToCorrectGuessMap.add(0);
         }
     }
@@ -57,7 +62,7 @@ public class HangmanGame {
 
     public boolean guess(String guess) {
         if(wordMap.containsKey(guess)) {
-            leftToGeuss--;
+            leftToGeuss = wordMap.get(guess);
             for(int i = 0; i < word.length(); i++) {
                 if (guess.equalsIgnoreCase(((Character)word.charAt(i)).toString())) {
                     wordToCorrectGuessMap.set(i, 1);

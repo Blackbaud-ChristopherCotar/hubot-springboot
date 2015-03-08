@@ -114,7 +114,7 @@ public class Hangman implements Handler {
     }
 
     boolean isGameStartedForChannel(String channelId) {
-        if(channelToGameMap.containsKey(channelId)) {
+        if(channelToGameMap.containsKey(channelId) && channelToGameMap.get(channelId) != null) {
             return true;
         } else {
             return false;
