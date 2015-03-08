@@ -23,21 +23,28 @@ public class Dispatcher {
         this.roomState = slackRTMResponse;
     }
 
-    public String respond(SlackChatMessage slackChatMessage) {
-        System.out.println("responding...");
+    public String processMessage(SlackChatMessage slackChatMessage) {
         if(isBotCommand(slackChatMessage)) {
-            String message = slackChatMessage.getText();
-            String command = extractBotCommand(message);
+            return respond(slackChatMessage);
+        } else {
+            return null;
+        }
+    }
 
-            Ping ping = new Ping();
-            if(ping.handlesCommand(command)) {
-                String handlerMessage = ping.processCommand(slackChatMessage);
-                return processValidChatResponse(slackChatMessage, handlerMessage);
-            }
+    String respond(SlackChatMessage slackChatMessage) {
+        System.out.println("responding...");
+
+        String message = slackChatMessage.getText();
+        String command = extractBotCommand(message);
+
+        Ping ping = new Ping();
+        if(ping.handlesCommand(command)) {
+            String handlerMessage = ping.processCommand(slackChatMessage);
+            return processValidChatResponse(slackChatMessage, handlerMessage);
         }
 
         // no handler processes this command, is null a could return value? meh
-        return null;
+        return processValidChatResponse(slackChatMessage, "BLARG");
     }
 
     String processValidChatResponse(SlackChatMessage slackChatMessage, String handlerMessage) {
