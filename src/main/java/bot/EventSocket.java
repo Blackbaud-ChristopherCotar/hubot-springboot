@@ -55,12 +55,14 @@ public class EventSocket {
     @OnWebSocketMessage
     public void onMessage(String msg) {
         SlackChatMessage chatMessage = parseMsg(msg);
-        String chatResponse = dispatcher.processMessage(chatMessage);
-        if(chatResponse != null) {
-            try {
-                session.getRemote().sendString(chatResponse);
-            } catch (IOException e) {
-                e.printStackTrace();
+        if(chatMessage != null) {
+            String chatResponse = dispatcher.processMessage(chatMessage);
+            if(chatResponse != null) {
+                try {
+                    session.getRemote().sendString(chatResponse);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         System.out.printf("Got msg: %s%n", msg);

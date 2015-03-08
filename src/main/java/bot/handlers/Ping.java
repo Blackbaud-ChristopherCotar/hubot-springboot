@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  *
  * {botname} ping -> pong
  */
-public class Ping {
+public class Ping implements Handler{
 
     public Ping() {}
 

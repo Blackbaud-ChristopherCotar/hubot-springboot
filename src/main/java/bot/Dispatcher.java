@@ -2,6 +2,7 @@ package bot;
 
 import bot.entities.SlackChatMessage;
 import bot.entities.SlackRTMResponse;
+import bot.handlers.Hangman;
 import bot.handlers.Ping;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,8 +20,13 @@ public class Dispatcher {
     private int idCounter = 0;
     private SlackRTMResponse roomState;
 
+    private Ping ping;
+    private Hangman hangman;
+
     public Dispatcher(SlackRTMResponse slackRTMResponse){
         this.roomState = slackRTMResponse;
+        this.hangman = new Hangman();
+        this.ping = new Ping();
     }
 
     public String processMessage(SlackChatMessage slackChatMessage) {
@@ -36,10 +42,13 @@ public class Dispatcher {
 
         String message = slackChatMessage.getText();
         String command = extractBotCommand(message);
+        slackChatMessage.setText(command);
 
-        Ping ping = new Ping();
         if(ping.handlesCommand(command)) {
             String handlerMessage = ping.processCommand(slackChatMessage);
+            return processValidChatResponse(slackChatMessage, handlerMessage);
+        } if(hangman.handlesCommand(command)) {
+            String handlerMessage = hangman.processCommand(slackChatMessage);
             return processValidChatResponse(slackChatMessage, handlerMessage);
         }
 
