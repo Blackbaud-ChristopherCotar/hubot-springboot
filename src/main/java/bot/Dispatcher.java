@@ -2,11 +2,13 @@ package bot;
 
 import bot.entities.SlackChatMessage;
 import bot.entities.SlackRTMResponse;
+import bot.handlers.Handler;
 import bot.handlers.Hangman;
 import bot.handlers.Ping;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,13 +22,12 @@ public class Dispatcher {
     private int idCounter = 0;
     private SlackRTMResponse roomState;
 
-    private Ping ping;
-    private Hangman hangman;
+    private ArrayList<Handler> handlers = new ArrayList<>();
 
     public Dispatcher(SlackRTMResponse slackRTMResponse){
         this.roomState = slackRTMResponse;
-        this.hangman = new Hangman();
-        this.ping = new Ping();
+        handlers.add(new Ping());
+        handlers.add(new Hangman());
     }
 
     public String processMessage(SlackChatMessage slackChatMessage) {
@@ -42,16 +43,21 @@ public class Dispatcher {
 
         String message = slackChatMessage.getText();
         String command = extractBotCommand(message);
+        if(command.trim().equalsIgnoreCase("help")) {
+            StringBuilder response = new StringBuilder();
+            for(Handler handler : handlers) {
+                response.append(handler.info());
+            }
+            return processValidChatResponse(slackChatMessage, response.toString());
+        }
         slackChatMessage.setText(command);
 
-        if(ping.handlesCommand(command)) {
-            String handlerMessage = ping.processCommand(slackChatMessage);
-            return processValidChatResponse(slackChatMessage, handlerMessage);
-        } if(hangman.handlesCommand(command)) {
-            String handlerMessage = hangman.processCommand(slackChatMessage);
-            return processValidChatResponse(slackChatMessage, handlerMessage);
+        for(Handler handler : handlers) {
+            if(handler.handlesCommand(command)) {
+                String handlerMessage = handler.processCommand(slackChatMessage);
+                return processValidChatResponse(slackChatMessage, handlerMessage);
+            }
         }
-
         // no handler processes this command, is null a could return value? meh
         return processValidChatResponse(slackChatMessage, "BLARG");
     }

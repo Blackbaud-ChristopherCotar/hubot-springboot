@@ -14,6 +14,10 @@ public class Ping implements Handler{
 
     public Ping() {}
 
+    public String info() {
+        return "ping -> pong\n";
+    }
+
     /**
      *
      * @param command command part of message text after {botname}
@@ -35,8 +39,7 @@ public class Ping implements Handler{
      * @return String the message to send back to Slack
      */
     public String processCommand(SlackChatMessage slackChatMessage) {
-        return "pong @" + slackChatMessage.getUser();
+        return "pong";
     }
-
 
 }

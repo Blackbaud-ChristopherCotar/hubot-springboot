@@ -9,4 +9,6 @@ public interface Handler {
     boolean handlesCommand(String command);
 
     String processCommand(SlackChatMessage slackChatMessage);
+
+    String info();
 }

@@ -17,10 +17,14 @@ import java.util.regex.Pattern;
 public class Hangman implements Handler {
 
     private Map<String, HangmanGame> channelToGameMap = new HashMap<>();
-    private static final Pattern NEW_GAME_PATTERN = Pattern.compile("\\s*hangman\\s+start\\s*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern NEW_GAME_PATTERN = Pattern.compile("\\s*hangman\\s*", Pattern.CASE_INSENSITIVE);
     private static final Pattern GUESS_PATTERN = Pattern.compile("\\s*hangman\\s+guess\\s+([a-z]+)\\s*", Pattern.CASE_INSENSITIVE);
 
     public Hangman() {}
+
+    public String info() {
+        return "hangman -> starts new hangman game for this channel, or shows the status of the current game\n";
+    }
 
     /**
      *
