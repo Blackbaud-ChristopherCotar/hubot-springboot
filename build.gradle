@@ -34,9 +34,9 @@ dependencies {
     testCompile("junit:junit")
 }
 
-applicationDefaultJvmArgs = [
-    "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
-]
+//applicationDefaultJvmArgs = [
+//    "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
+//]
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'

@@ -2,9 +2,6 @@ package bot;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import bot.entities.SlackChatMessage;
 import bot.entities.SlackRTMResponse;
