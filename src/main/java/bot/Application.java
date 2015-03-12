@@ -19,6 +19,8 @@ import java.util.Map;
 public class Application {
 
     private static final String SLACK_TOKEN = "SLACK_TOKEN";
+    private static final int MAX_NUM_AUTH_ATTEMPTS = 5;
+    private static final long BACKOFF_INITIAL_MILLIS = 250;
 
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(Application.class, args);
@@ -37,14 +39,27 @@ public class Application {
         RestTemplate restTemplate = new RestTemplate();
         SlackRTMResponse slackResponse = null;
         boolean ok = false;
+        long backOff = BACKOFF_INITIAL_MILLIS; // backoff time in milli
+        int numAuthAttemps = 0;
         while(!ok) {
             slackResponse = restTemplate.getForObject(destUri, SlackRTMResponse.class, params);
             ok = slackResponse.getOk();
-            if(ok) System.out.println("slack says hi!");
+            System.out.println("BACKOFF = " + backOff);
+            if(ok) {
+                System.out.println(slackResponse);
+            } else {
+                try {
+                    Thread.sleep(backOff);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(++numAuthAttemps >= MAX_NUM_AUTH_ATTEMPTS) {
+
+                }
+                backOff = backOff * 2;
+            }
         }
         String webSocketUri = slackResponse.getUrl();
-
-        System.out.println(slackResponse);
 
         WebSocketClient client = new WebSocketClient(new SslContextFactory());
         try {
