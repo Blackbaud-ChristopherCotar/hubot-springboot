@@ -18,11 +18,19 @@ import java.util.Map;
 @EnableScheduling
 public class Application {
 
+    private static final String SLACK_TOKEN = "SLACK_TOKEN";
+
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(Application.class, args);
 
         String destUri = "https://slack.com/api/rtm.start?token={token}";
-        String token = System.getenv("SLACK_TOKEN");
+        String token = "";
+        try{
+            token = getSlackToken();
+        } catch(IllegalStateException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
         Map<String, String> params = new HashMap<>();
         params.put("token", token);
 
@@ -50,6 +58,14 @@ public class Application {
         catch (Exception e) {
             e.printStackTrace(System.err);
         }
+    }
+
+    static String getSlackToken() {
+        String token = System.getenv(SLACK_TOKEN);
+        if(token == null || token.isEmpty()) {
+            throw new IllegalStateException(SLACK_TOKEN + " environment variable is not set or is empty. Brobot will not start without a token.");
+        }
+        return token;
     }
 
 }
