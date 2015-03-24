@@ -5,6 +5,7 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.metrics.writer.MessageChannelMetricWriter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -48,6 +49,7 @@ public class Application {
             if(ok) {
                 System.out.println(slackResponse);
             } else {
+                System.out.println(slackResponse);
                 try {
                     Thread.sleep(backOff);
                 } catch (InterruptedException e) {
