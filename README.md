@@ -22,3 +22,4 @@ Functions that would be cool:
 * Room chat statistics (i.e. most frequent words)
 * Mirror Yobot actions
 * Bugzilla bug searches?
+* Texas Hold'em using http://deckofcardsapi.com/
